@@ -25,19 +25,15 @@ Clean and format data to be more meaningful and clearer. In this step, I have or
 SELECT COUNT(DISTINCT(Id)) 
 	FROM BellaBeat.dbo.DailyActivity
 	-- 33
-
 SELECT COUNT(DISTINCT(Id)) 
 	FROM BellaBeat.dbo.DailyCalories
 	-- 33
-
 SELECT COUNT(DISTINCT(Id)) 
 	FROM BellaBeat.dbo.DailyIntensities
 	-- 33
-
 SELECT COUNT(DISTINCT(Id)) 
 	FROM BellaBeat.dbo.DailySteps
 	-- 33
-
 SELECT COUNT(DISTINCT(Id)) 
 	FROM BellaBeat.dbo.SleepDay
 	-- 24
@@ -46,3 +42,152 @@ SELECT COUNT(DISTINCT(Id))
 	FROM BellaBeat.dbo.WeightLog
 	-- 8
 GO
+
+---- Check if the Id and date of DailyCalories, DailyIntensities, DailySteps are the same with the Id in DailyActivity
+-- Check DailyCalories:
+SELECT BellaBeat.dbo.DailyCalories.Calories, BellaBeat.dbo.DailyActivity.Calories
+	FROM BellaBeat.dbo.DailyActivity
+	INNER JOIN BellaBeat.dbo.DailyCalories
+	ON BellaBeat.dbo.DailyActivity.Id=BellaBeat.dbo.DailyCalories.Id AND BellaBeat.dbo.DailyActivity.ActivityDate=BellaBeat.dbo.DailyCalories.ActivityDay
+
+-- Check DailyIntensities:
+SELECT BellaBeat.dbo.DailyIntensities.SedentaryMinutes, BellaBeat.dbo.DailyActivity.SedentaryMinutes
+	FROM BellaBeat.dbo.DailyActivity
+	INNER JOIN BellaBeat.dbo.DailyIntensities
+	ON BellaBeat.dbo.DailyActivity.Id=BellaBeat.dbo.DailyIntensities.Id AND BellaBeat.dbo.DailyActivity.ActivityDate=BellaBeat.dbo.DailyIntensities.ActivityDay
+
+-- Check DailySteps:
+SELECT BellaBeat.dbo.DailyIntensities.SedentaryMinutes, BellaBeat.dbo.DailyActivity.SedentaryMinutes
+	FROM BellaBeat.dbo.DailyActivity
+	INNER JOIN BellaBeat.dbo.DailyIntensities
+	ON BellaBeat.dbo.DailyActivity.Id=BellaBeat.dbo.DailyIntensities.Id AND BellaBeat.dbo.DailyActivity.ActivityDate=BellaBeat.dbo.DailyIntensities.ActivityDay	
+GO
+
+-- Formatted date column into YYYY/MM/DD date format in Daly.Activity table
+ALTER TABLE BellaBeat.dbo.DailyActivity
+	ADD Date DATE
+UPDATE BellaBeat.dbo.DailyActivity
+	SET Date=CONVERT(DATE,ActivityDate,101)
+ALTER TABLE BellaBeat.dbo.DailyActivity
+	DROP COLUMN ActivityDate
+GO
+
+-- Formatted all numerical data into FLOAT in Daly.Activity table
+ALTER TABLE BellaBeat.dbo.DailyActivity
+	ALTER COLUMN Id FLOAT
+ALTER TABLE BellaBeat.dbo.DailyActivity
+	ALTER COLUMN TotalSteps INT
+ALTER TABLE BellaBeat.dbo.DailyActivity
+	ALTER COLUMN TotalDistance FLOAT
+ALTER TABLE BellaBeat.dbo.DailyActivity	
+	ALTER COLUMN TrackerDistance FLOAT
+ALTER TABLE BellaBeat.dbo.DailyActivity
+	ALTER COLUMN LoggedActivitiesDistance FLOAT
+ALTER TABLE BellaBeat.dbo.DailyActivity	
+	ALTER COLUMN VeryActiveDistance	FLOAT
+ALTER TABLE BellaBeat.dbo.DailyActivity	
+	ALTER COLUMN ModeratelyActiveDistance FLOAT
+ALTER TABLE BellaBeat.dbo.DailyActivity	
+	ALTER COLUMN LightActiveDistance FLOAT
+ALTER TABLE BellaBeat.dbo.DailyActivity	
+	ALTER COLUMN SedentaryActiveDistance FLOAT
+ALTER TABLE BellaBeat.dbo.DailyActivity	
+	ALTER COLUMN VeryActiveMinutes INT
+ALTER TABLE BellaBeat.dbo.DailyActivity	
+	ALTER COLUMN FairlyActiveMinutes INT
+ALTER TABLE BellaBeat.dbo.DailyActivity	
+	ALTER COLUMN LightlyActiveMinutes INT
+ALTER TABLE BellaBeat.dbo.DailyActivity	
+	ALTER COLUMN SedentaryMinutes INT
+ALTER TABLE BellaBeat.dbo.DailyActivity	
+	ALTER COLUMN Calories INT
+GO
+
+-- Separate SleepDay column into Date and Hour columns in SleepDay table
+ALTER TABLE BellaBeat.dbo.SleepDay
+	ADD Date DATE
+UPDATE BellaBeat.dbo.SleepDay
+	SET Date=CONVERT(DATE,SleepDay,101)
+
+ALTER TABLE BellaBeat.dbo.SleepDay
+	ADD Time TIME
+UPDATE BellaBeat.dbo.SleepDay
+	SET Time=RIGHT(SleepDay,LEN(SleepDay)- CHARINDEX(' ', SleepDay + ' '))
+
+ALTER TABLE BellaBeat.dbo.SleepDay
+	DROP COLUMN SleepDay
+GO
+
+-- Separate SleepDay column into Date and Hour columns in WeightLog table
+ALTER TABLE BellaBeat.dbo.WeightLog
+	ADD Day DATE
+UPDATE BellaBeat.dbo.WeightLog
+	SET Day=CONVERT(DATE,Date,101)
+
+ALTER TABLE BellaBeat.dbo.WeightLog
+	ADD Time TIME
+UPDATE BellaBeat.dbo.WeightLog
+	SET Time=CONVERT(TIME, Date)
+
+ALTER TABLE BellaBeat.dbo.WeightLog
+	DROP COLUMN Date
+GO
+
+-- Find duplicates           
+SELECT
+	Id, 
+	Date,
+	COUNT(*) AS num_of_id
+FROM BellaBeat.dbo.DailyActivity
+GROUP BY
+	Id,
+	Date  --- No duplicate found
+
+SELECT
+	Id, 
+	Date,
+	COUNT(*) AS num_of_id
+FROM BellaBeat.dbo.SleepDay
+GROUP BY
+	Id,
+	Date -- 3 duplicates found
+
+SELECT
+	Id, 
+	Day,
+	COUNT(*) AS num_of_id
+FROM BellaBeat.dbo.WeightLog
+GROUP BY
+	Id,
+	Day -- No duplicate found
+
+-- Remove duplicates in table SleepDay 
+
+WITH CTE AS(
+	SELECT Id,
+	ROW_NUMBER() OVER(PARTITION BY Id ORDER BY(SELECT NULL)) AS RowNum
+	FROM BellaBeat.dbo.SleepDay
+)
+DELETE FROM CTE WHERE RowNum > 1
+GO
+
+--Recheck if there is still duplicate in table SleepDay
+SELECT
+	Id, 
+	Date,
+	COUNT(*) AS num_of_id
+FROM BellaBeat.dbo.SleepDay
+GROUP BY
+	Id,
+	Date
+Go -- No duplicate found
+
+-- Check for missing Ids in the 3 tables
+SELECT * FROM BellaBeat.dbo.DailyActivity
+WHERE Id IS NULL 
+
+SELECT * FROM BellaBeat.dbo.WeightLog
+WHERE Id IS NULL
+GO -- There is no NULL value in the 3 tables
+```
+## ANALYZING
