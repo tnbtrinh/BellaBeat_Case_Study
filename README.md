@@ -220,6 +220,6 @@ From BellaBeat.dbo.DailyActivity
 Group BY Id
 GO
 ```
-![image](<img width="1298" alt="Summary" src="https://github.com/tnbtrinh/BellaBeat_Case_Study/assets/152029040/ef314c17-3cee-45d0-9055-56671bec3a2d">)
+![image](https://github.com/tnbtrinh/BellaBeat_Case_Study/issues/1#issue-2070921116)
 
-![Dashboard 1 (2)](https://user-images.githubusercontent.com/96917306/156193153-24d0a864-da4b-44f1-9d4e-02b389650d3d.png)
+
