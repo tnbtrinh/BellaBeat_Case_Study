@@ -180,7 +180,7 @@ FROM BellaBeat.dbo.SleepDay
 GROUP BY
 	Id,
 	Date
-Go -- No duplicate found
+GO -- No duplicate found
 
 -- Check for missing Ids in the 3 tables
 SELECT * FROM BellaBeat.dbo.DailyActivity
@@ -191,3 +191,35 @@ WHERE Id IS NULL
 GO -- There is no NULL value in the 3 tables
 ```
 ## ANALYZING
+Transform the data to identify patterns and draw conclusions. As determined by the Process step, I have a variety of data tables that measures different fitness parameters (steps, calories, distance, sleep, activity, etc). However, for organizational consistency as well as ease and simplicity, I will perform analysis on the data tables by whether observations are provided at a daily intervals. This is made possible because the “Id” column is a shared key that corresponds between each of the data tables.
+In this process, I organized and formatted the data, performed some calculations, and identified trends as well as relationships between each variable.
+```SQL
+SELECT Id,
+MIN(TotalSteps) AS Min_Total_Steps,
+MAX(TotalSteps) AS Max_Total_Steps, 
+AVG(TotalSteps) AS Avg_Total_Stpes,
+MIN(TotalDistance) AS Min_Total_Distance, 
+MAX(TotalDistance) AS Max_Total_Distance, 
+AVG(TotalDistance) AS Avg_Total_Distance,
+MIN(Calories) AS Min_Total_Calories,
+MAX(Calories) AS Max_Total_Calories,
+AVG(Calories) AS Avg_Total_Calories,
+MIN(VeryActiveMinutes) AS Min_Very_Active_Minutes,
+MAX(VeryActiveMinutes) AS Max_Very_Active_Minutes,
+AVG(VeryActiveMinutes) AS Avg_Very_Active_Minutes,
+MIN(FairlyActiveMinutes) AS Min_Fairly_Active_Minutes,
+MAX(FairlyActiveMinutes) AS Max_Fairly_Active_Minutes,
+AVG(FairlyActiveMinutes) AS Avg_Fairly_Active_Minutes,
+MIN(LightlyActiveMinutes) AS Min_Lightly_Active_Minutes,
+MAX(LightlyActiveMinutes) AS Max_Lightly_Active_Minutes,
+AVG(LightlyActiveMinutes) AS Avg_Lightly_Active_Minutes,
+MIN(SedentaryMinutes) AS Min_Sedentary_Minutes,
+MAX(SedentaryMinutes) AS Max_Sedentary_Minutes,
+AVG(SedentaryMinutes) AS Avg_Sedentary_Minutes
+From BellaBeat.dbo.DailyActivity
+Group BY Id
+GO
+```
+![image](<img width="1298" alt="Summary" src="https://github.com/tnbtrinh/BellaBeat_Case_Study/assets/152029040/ef314c17-3cee-45d0-9055-56671bec3a2d">)
+
+![Dashboard 1 (2)](https://user-images.githubusercontent.com/96917306/156193153-24d0a864-da4b-44f1-9d4e-02b389650d3d.png)
