@@ -313,7 +313,7 @@ GO
 <img width="637" alt="image" src="https://github.com/tnbtrinh/BellaBeat_Case_Study/assets/152029040/72210bc1-805c-495a-9251-5da2eda20d39">
 <img width="624" alt="image" src="https://github.com/tnbtrinh/BellaBeat_Case_Study/assets/152029040/f42dfa50-621b-4922-8de2-3e91f402e982">
 
-As we can see, there is little correlation between walking and sleeping time
+As we can see, there is no correlation between walking and sleeping time
 
 ```SQL
 -- Indicate whether the user is overweight/underweight/healthy compared to BMI
@@ -329,9 +329,20 @@ GROUP BY Id
 GO
 ```
 <img width="304" alt="image" src="https://github.com/tnbtrinh/BellaBeat_Case_Study/assets/152029040/9a94a75b-6d7c-4359-9945-010320f8c79b">
+
 <img width="568" alt="image" src="https://github.com/tnbtrinh/BellaBeat_Case_Study/assets/152029040/5d8c69d9-f4f7-4be4-a44d-b3a2ebb29969">
 
+## CONCLUSION
+- In a period of a month (April to May 2016), there was 88% of users in "Very Often Usage" when it came to how frequent they wear their Fitbit tracker
+- Most of the users were not active, as sendentary minutes show the highest values
+- Saturday and Tuesday made up to the most active day in walking
+- There is no correlation between steps, calories burned and total minutes asleep
+- There moe intense users workout, the better for them to have a better BMI index
 
+## ACT
+- Showcase the importance of doing sports activities daily, by highlighting the correlation between total active minutes vs healthy weight, so that users can have a better awareness of using the product more often to check the index
+- Improve the notification feature of the tracker app as reminders for users to achieve their goal and increase total steps each day
+- Provide reward voucher/redeem based on the total amount of steps reached daily/weekly to boost the workout
 
 
 
