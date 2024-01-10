@@ -1,4 +1,4 @@
-# FITBIT WELLNESS TECHNOLOGY ANALYSIS
+# FITBIT WELLNESS DEVICE ANALYSIS
 In this case study, I will perform a real world tasks of a junior data analyst. I imagine myself working for [BellaBeat](https://bellabeat.com/), a high tech manufacturer of health-focused products for women.
 Urška Sršen, cofounder and Chief Creative Officer of Bellabeat, believes that analyzing smart device fitness data could help unlock new growth opportunities for the company. I have been asked to focus on one of Bellabeat’s products and analyze smart device data to gain insight into how consumers are using their smart devices. The insights I discover will then help guide marketing strategy for the company. I will present my analysis to the Bellabeat executive team along with my high-level recommendations for Bellabeat’s marketing strategy.
 
